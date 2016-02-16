@@ -17,10 +17,12 @@ int main(int argc, char **argv) {
 
   double latency_in_us;
 
+  int i;
+
   if (myid < partner) {
     double t1 = MPI_Wtime();
 
-    for (int i = 0; i < N; ++i) {
+    for (i = 0; i < N; ++i) {
       MPI_Send(&buf, 1, MPI_INT, partner, 0, MPI_COMM_WORLD);
       MPI_Recv(&buf, 1, MPI_INT, partner, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     }
@@ -29,14 +31,14 @@ int main(int argc, char **argv) {
 
     latency_in_us = 1000000*(t2 - t1)/N/2.0;
   } else {
-    for (int i = 0; i < N; ++i) {
+    for (i = 0; i < N; ++i) {
       MPI_Recv(&buf, 1, MPI_INT, partner, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
       MPI_Send(&buf, 1, MPI_INT, partner, 0, MPI_COMM_WORLD);
     }
   }
 
   if (myid == 0) {
-    for (int i = 1; i < sz/2; ++i) {
+    for (i = 1; i < sz/2; ++i) {
       double recv_latency;
       MPI_Recv(&recv_latency, 1, MPI_DOUBLE, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
       latency_in_us += recv_latency;

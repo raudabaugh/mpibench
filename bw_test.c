@@ -17,11 +17,13 @@ int main(int argc, char **argv) {
 
   double bw_in_MBs;
 
-  for (unsigned int packet_size = 4; packet_size <= 4*1024*1024; packet_size *= 2) {
+  unsigned int packet_size;
+  int i;
+  for (packet_size = 4; packet_size <= 4*1024*1024; packet_size *= 2) {
     if (myid < partner) {
       double t1 = MPI_Wtime();
 
-      for (int i = 0; i < N; ++i) {
+      for (i = 0; i < N; ++i) {
         MPI_Recv(buf, packet_size / sizeof(int), MPI_INT, partner, 0,
             MPI_COMM_WORLD, MPI_STATUS_IGNORE);
       }
@@ -30,13 +32,13 @@ int main(int argc, char **argv) {
 
       bw_in_MBs = packet_size * N / (1024*1024) / (t2-t1);
     } else {
-      for (int i = 0; i < N; ++i) {
+      for (i = 0; i < N; ++i) {
         MPI_Send(buf, packet_size / sizeof(int), MPI_INT, partner, 0, MPI_COMM_WORLD);
       }
     }
 
     if (myid == 0) {
-      for (int i = 1; i < sz/2; ++i) {
+      for (i = 1; i < sz/2; ++i) {
         double recv_bw;
         MPI_Recv(&recv_bw, 1, MPI_DOUBLE, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         bw_in_MBs += recv_bw;
