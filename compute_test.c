@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 
   double t2 = MPI_Wtime();
 
-  us_per_op = 1000000*(t2 - t1)/N;
+  us_per_op = 1000000*(t2 - t1)/N/2;
 
   if (myid == 0) {
     for (i = 1; i < sz; ++i) {

@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 
   unsigned int packet_size;
   int i;
-  for (packet_size = 4; packet_size <= 4*1024*1024; packet_size *= 2) {
+  for (packet_size = 128; packet_size <= 4*1024*1024; packet_size *= 2) {
     if (myid < partner) {
       double t1 = MPI_Wtime();
 
